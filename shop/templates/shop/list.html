@@ -1,0 +1,81 @@
+{% extends "shop/base.html" %}
+{% block title %}{{ title }}{% endblock  %}
+
+{% block content %}
+ 
+{% if recommended %}
+
+<h5>Recommended for you </h5>
+
+<div class="row">
+{% for item in product %}
+
+    <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <!-- <a href="#"><img class="card-img-top" src="/media/{{ item.image }}" alt=""></a> -->
+                <a href="#"><img class="card-img-top" src="/media/products/{{item.category.slug}}.jpg" alt="">></a>
+
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <a href="{% url "shop:detail" item.slug %}">{{ item.name|title }}</a>
+                  </h4>
+                  <h5>Rs. {{ item.price|floatformat:"2" }}</h5>
+                </div>
+                <div class="card-footer">
+                  <small class="text-muted"><a class="btn btn-success" href="{% url "shop:cart" item.slug %}">Add to Cart</a></small>
+                </div>
+              </div>
+            </div>
+{% empty %}
+    <div class="card w-100">
+    <div class="card-body">
+        <h4>Item not available</h4>
+    </div>
+    </div>
+{% endfor %}
+</div>
+{% else %}
+<div class="row">
+{% for item in products.object_list %}
+    <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <!-- <a href="#"><img class="card-img-top" src="/media/{{ item.image }}" alt=""></a> -->
+                <a href="#">
+                  <img class="card-img-top" src="/media/products/{{item.category.slug}}.jpg" alt="">></a>
+
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <a href="{% url "shop:detail" item.slug %}">{{ item.name|title }}</a>
+                  </h4>
+                  <h5>Rs. {{ item.price|floatformat:"2" }}</h5>
+                </div>
+                <div class="card-footer">
+                  <small class="text-muted"><a class="btn btn-success" href="{% url "shop:cart" item.slug %}">Add to Cart</a></small>
+                </div>
+              </div>
+            </div>
+{% empty %}
+    <div class="card w-100">
+    <div class="card-body">
+        <h4>Item not available</h4>
+    </div>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+
+
+    </div>
+
+    <div class="">
+      {% if products.has_previous %}
+      <a href="{% url 'shop:home' %}?page={{ products.previous_page_number }}">Previous</a>
+      {% endif %}
+      {% if products.has_next %}
+      <a href="{% url 'shop:home' %}?page={{ products.next_page_number }}">Next</a>
+    
+      {% endif %}
+    </div>
+
+{% endblock %}
+

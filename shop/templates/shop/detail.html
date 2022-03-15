@@ -1,0 +1,102 @@
+
+   
+{% extends "shop/base.html" %}
+{% block title %}Ecommerce Home Page{% endblock  %}
+{% load bootstrap4 %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+          <a href="#"><img class="card-img-top" src="/media/products/{{product.category.slug}}.jpg" alt=""></a>
+        </div>
+
+        <div class="col-md-4">
+          <h3 class="my-3">{{ product.name|title }}</h3>
+          <p>{{ product.description }}</p>
+    <p>Rating: {{product.rating}}</p>
+          
+            <form action="{% url "shop:cart" product.slug%}">
+                <input type="submit" class="btn btn-danger" value="Add to cart">
+            </form>
+        </div>
+</div>
+        <hr>
+        <div class="row">
+        {% for item in reviews %}
+            <div class="card mb-3 w-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ item.rate }} star{{ item.rate|pluralize }}</h5>
+            <p class="card-text">{{ item.review}}</p>
+            <p class="card-text">By : {{ item.user.username}}</p>
+          </div>
+          <div class="card-footer text-muted">
+            {{ item.created|timesince }} ago
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+    <div class="row mb-5">
+    <form method="post">
+        {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit" class="btn btn-success">
+    </form>
+    </div>
+
+    <!-- Famous products -->
+<h4>Famous products of same category</h4>
+
+<div  class="border row">
+
+  {% for product in most_popular %}
+  <div class="col-lg-3 col-md-4 mb-4">
+    <div class="card h-100">
+      <!-- <a href="#"><img class="card-img-top" src="/media/{{ item.image }}" alt=""></a> -->
+      <a href="#">
+        <img class="card-img-top" src="/media/products/{{product.category.slug}}.jpg" alt=""></a>
+
+      <div class="card-body">
+        <h6 class="card-title">
+          <a href="{% url "shop:detail" product.slug %}">{{ product.name|title }}</a>
+        </h6>
+        <h6>Rs. {{ product.price|floatformat:"2" }}</h6>
+        <small>Rating: {{ product.rating }}</small>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted"><a class="btn btn-success" href="{% url "shop:cart" product.slug %}">Add to Cart</a></small>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+
+<br>
+<!-- Similar products -->
+
+<h4>Simlar products</h4>
+
+<div  class="border row">
+
+  {% for product in similar_products %}
+  <div class="col-lg-3 col-md-4 mb-4">
+    <div class="card h-100">
+      <!-- <a href="#"><img class="card-img-top" src="/media/{{ item.image }}" alt=""></a> -->
+      <a href="#">
+        <img class="card-img-top" src="/media/products/{{product.category.slug}}.jpg" alt=""></a>
+
+      <div class="card-body">
+        <h6 class="card-title">
+          <a href="{% url "shop:detail" product.slug %}">{{ product.name|title }}</a>
+        </h6>
+        <h6>Rs. {{ product.price|floatformat:"2" }}</h6>
+        <small>Rating: {{ product.rating }}</small>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted"><a class="btn btn-success" href="{% url "shop:cart" product.slug %}">Add to Cart</a></small>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+{% endblock %}
